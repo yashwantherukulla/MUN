@@ -108,9 +108,9 @@ async def fact_analyser(input_text: str):
     return response
 
 async def main(text:str):
-    # split_text = semantic_sentence_splitter(text)
+    split_text = semantic_sentence_splitter(text)
     tfJSON = {}
-    split_text = text.split('.')
+    # split_text = text.split('.')
     
     for i,t in enumerate(split_text):
         out = await fact_analyser(t)
