@@ -11,4 +11,5 @@ GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 llm = ChatGoogleGenerativeAI(model="gemini-pro", google_api_key=GOOGLE_API_KEY)
 
 def fact_analyser(input_text: str):
-    prompt = PromptTemplate("""Given the input text, """)
+    prompt = PromptTemplate("""Given the input text, see if the sentence is factual or not.
+                            If it factual, then """)
