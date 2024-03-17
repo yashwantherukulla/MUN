@@ -21,7 +21,7 @@ def summarize(text:str):
                             The summary should be a concise and coherent representation of the input text.
                             If there are any statistics in the input text, they should be included in the summary.
                             The main points must be there in the summary.
-                            The summary should be no longer than 3 sentences.
+                            The summary should be no longer than 80 words unless required.
                             INPUT TEXT: {inputText}""")
     chain = prompt | llm | StrOutputParser()
     response = chain.invoke({"inputText": text})
