@@ -14,3 +14,7 @@ class emailAdd(BaseModel):
 
 class munPage(BaseModel):
     email: str = ''
+    
+class munReg(BaseModel):
+    email: str = ''
+    host_code: str = ''
