@@ -7,9 +7,12 @@ from sqlalchemy.orm.exc import NoResultFound
 from datetime import datetime
 from sqlalchemy import ForeignKey
 
+
+
+
 Base = declarative_base()
 
-engine = create_engine('sqlite:///./data.db')
+engine = create_engine('sqlite:///../data.db')
 Session = sessionmaker(bind=engine)
 
 class Person(Base):
@@ -20,22 +23,22 @@ class Person(Base):
 
 class User(Base):
     __tablename__ = 'usr'
-    person  = Column(String, ForeignKey('person.email'))
-    id = Column(Integer, primary_key=True)
+    person  = Column(String, ForeignKey('person.email'),nullable=False)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     host_code = Column(String, nullable=False)
-    user_id = Column(String(20), unique=True, nullable=False)
     post = Column(String(50), nullable=False)
     auto_reply_switch = Column(Boolean, nullable=False, default=True)
     attendance = Column(Boolean, nullable=False, default=False)
 
     def __repr__(self):
-        return f"user('{self.host_code}','{self.user_id}', '{self.post}')"
+        return f"user('{self.host_code}', '{self.post}')"
 
 
 
 class Sw(Base):
     __tablename__ = 'sw'
-    host_code = Column(String, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    host_code = Column(String)
     host_name = Column(String, nullable=False)
     switch = Column(Boolean, nullable=False, default=True)
     link = Column(Text, nullable=False)
@@ -47,7 +50,7 @@ class Sw(Base):
 class certificate(Base):
     __tablename__ = 'certificate'
 
-    id = Column(Integer, primary_key=True)  # Add this line
+    id = Column(Integer, primary_key=True, autoincrement=True)  # Add this line
     sw_id = Column(String, ForeignKey('sw.host_code'), nullable=False)
     certificate_win = Column(Text, nullable=True)
     certificate_part = Column(Text, nullable=True)
@@ -56,7 +59,7 @@ class certificate(Base):
         return f"user('{self.certificate_win}','{self.certificate_part}')"
 class design(Base):
     __tablename__ = 'design'
-    id = Column(Integer, primary_key=True)  # Add this line
+    id = Column(Integer, primary_key=True, autoincrement=True)  # Add this line
     sw_id = Column(String, ForeignKey('sw.host_code'), nullable=False)
     certificate_win = Column(Text, nullable=True)
     certificate_part = Column(Text, nullable=True)
@@ -65,19 +68,19 @@ class design(Base):
 
 class points(Base):
     __tablename__ = 'points'
-    id = Column(Integer, primary_key=True)  # Add this line
+    id = Column(Integer, primary_key=True, autoincrement=True)  # Add this line
     sw_id = Column(String, ForeignKey('sw.host_code'), nullable=False)
     person = Column(String, ForeignKey('person.email'), nullable=False)
     points = Column(Integer, nullable=False, default=0)
     
 
-  
+
 
 
 class Message(Base):
     __tablename__ = 'message'
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     host_code = Column(String, nullable=False)
     to = Column(String(50), nullable=False)
     from_c = Column(String(50), nullable=False)
@@ -161,17 +164,74 @@ def add_email(email):
     session.add(person)
     session.commit()
 
-# # Create a new instance of the Sw class
-# sw = Sw(
-#     host_code='test_host_code',
-#     host_name='test_host_name',
-#     switch=True,
-#     link='http://example.com',
-#     orgn='test_orgn'
-# )
 
-# # Add the new instance to the session
+# add_email("harshdipashah@gmail.com")
+# Create a new instance of the Sw class
+sw = Sw(
+    host_code='test_host_code',
+    host_name='test_host_name',
+    switch=True,
+    link='http://example.com',
+    orgn='test_orgn'
+)
+
+sw1 = Sw(
+    host_code='test_host_code1',
+    host_name='test_host_name1',
+    switch=True,
+    link='http://example1.com',
+    orgn='test_orgn1'
+)
+
+sw2 = Sw(
+    host_code='test_host_code2',
+    host_name='test_host_name2',
+    switch=False,
+    link='http://example2.com',
+    orgn='test_orgn2'
+)
+
+sw3 = Sw(
+    host_code='test_host_code3',
+    host_name='test_host_name3',
+    switch=True,
+    link='http://example3.com',
+    orgn='test_orgn3'
+)
+
+
+# Add the new instance to the session
 # session.add(sw)
+# session.add(sw1)
+# session.add(sw2)
+# session.add(sw3)
 
 # # Commit the session to write the changes to the database
 # session.commit()
+
+
+person  = session.query(Person).filter_by(email='harshdipashah@gmail.com').first()
+
+user1 = User(
+    person=person.email,
+    host_code='test_host_code',
+    post='test_post',
+    auto_reply_switch=True,
+    attendance=False
+)
+
+user2 = User(
+    person=person.email,
+    host_code='test_host_code2',
+    post='test_post2',
+    auto_reply_switch=False,
+    attendance=True
+)
+
+# session.add(user1)
+# session.add(user2)
+
+# session.commit()
+
+person1 = session.query(Person).filter_by(email='harshdipashah@gmail.com').first()
+print(person1)
