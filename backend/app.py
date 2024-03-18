@@ -58,7 +58,7 @@ async def send_message(data: sendMessages):
 
 
 @app.post('/email_sign_up')
-async def email_add(data: emailAdd, request: Request):
+async def email_add(data: emailAdd):
     try:
         email = data.email
         if "@" not in email:
