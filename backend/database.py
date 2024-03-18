@@ -232,6 +232,3 @@ user2 = User(
 # session.add(user2)
 
 # session.commit()
-
-person1 = session.query(Person).filter_by(email='harshdipashah@gmail.com').first()
-print(person1)
