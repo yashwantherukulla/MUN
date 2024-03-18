@@ -88,5 +88,11 @@ async def send_message(data: sendMessages):
 
 @app.post('/email_sign_up')
 async def email_add(data: emailAdd, current_user: dict = Depends(get_current_user)):
-    email = data.email
-    add_email(email)
+    try:
+        email = data.email
+        if "@" not in email:
+            return {"status":"Failed"}
+        add_email(email)
+        return {"status":"Success"}
+    except:
+        return {"status":"Failed"}
