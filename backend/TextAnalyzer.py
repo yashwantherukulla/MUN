@@ -14,6 +14,56 @@ GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 
 llm = ChatGoogleGenerativeAI(model="gemini-pro", google_api_key=GOOGLE_API_KEY)
 
+def load_local_llm():
+    import torch
+    from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig, pipeline
+    from langchain.llms import HuggingFacePipeline
+
+    model_name = "mistralai/Mistral-7B-Instruct-v0.2"
+
+    model = load_quantized_model(model_name)
+    tokenizer = AutoTokenizer.from_pretrained(model_name, padding_side="left")
+    tokenizer.pad_token = tokenizer.eos_token
+
+    pipeline = pipeline (
+        "text-generation",
+        model=model,
+        tokenizer=tokenizer,
+        use_cache=True,
+        device_map="auto",
+        max_length=8000,
+        do_sample=True,
+        top_k=5,
+        num_return_sequences=1,
+        eos_token_id=tokenizer.eos_token_id,
+        pad_token_id=tokenizer.pad_token_id,
+    )
+
+    llm = HuggingFacePipeline(pipeline=pipeline)
+
+    return llm
+
+def load_quantized_model(model_name: str):
+    bnb_config = BitsAndBytesConfig(
+        load_in_4bit=True,
+        bnb_4bit_use_double_quant=True,
+        bnb_4bit_quant_type="nf4",
+        bnb_4bit_compute_dtype=torch.bfloat16
+    )
+
+    model = AutoModelForCausalLM.from_pretrained(
+        model_name,
+        device_map="auto",
+        load_in_4bit=True,
+        torch_dtype=torch.bfloat16,
+        quantization_config=bnb_config
+    )
+    # device_map ensures the model is moved to GPU
+    # load_in_4bit applies 4-bit dynamic quantization to massively reduce the resource requirements
+    return model
+
+
+
 def summarize(text:str):
     prompt = PromptTemplate.from_template("""Given the input text, generate a summary of the input text.
                             The input text is a string of words.
