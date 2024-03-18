@@ -86,3 +86,7 @@ async def get_messagesL(data: messages, current_user: dict = Depends(get_current
 async def send_message(data: sendMessages):
     pass
 
+@app.post('/email_sign_up')
+async def email_add(data: emailAdd, current_user: dict = Depends(get_current_user)):
+    email = data.email
+    add_email(email)

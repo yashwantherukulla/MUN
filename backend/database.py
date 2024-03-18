@@ -5,15 +5,22 @@ from sqlalchemy import Column, Integer, String, Boolean, Text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm.exc import NoResultFound
 from datetime import datetime
+from sqlalchemy import ForeignKey
 
 Base = declarative_base()
 
 engine = create_engine('sqlite:///./data.db')
 Session = sessionmaker(bind=engine)
 
+class Person(Base):
+    __tablename__ = 'person'
+    email = Column(String, primary_key=True)
+    def __repr__(self):
+        return f"user('{self.email}')"
+
 class User(Base):
     __tablename__ = 'usr'
-
+    person  = Column(String, ForeignKey('person.email'))
     id = Column(Integer, primary_key=True)
     host_code = Column(String, nullable=False)
     user_id = Column(String(20), unique=True, nullable=False)
@@ -28,7 +35,6 @@ class User(Base):
 
 class Sw(Base):
     __tablename__ = 'sw'
-
     host_code = Column(String, primary_key=True)
     host_name = Column(String, nullable=False)
     switch = Column(Boolean, nullable=False, default=True)
@@ -38,6 +44,34 @@ class Sw(Base):
     def __repr__(self):
         return f"user('{self.host_code}','{self.link}','{self.orgn}')"
 
+class certificate(Base):
+    __tablename__ = 'certificate'
+
+    sw_id = Column(String, ForeignKey('sw.host_code'), nullable=False)
+    certificate_win = Column(Text, nullable=True)
+    certificate_part = Column(Text, nullable=True)
+    def __repr__(self):
+        return f"user('{self.certificate_win}','{self.certificate_part}')"
+
+
+class design(Base):
+    __tablename__ = 'design'
+
+    sw_id = Column(String, ForeignKey('sw.host_code'), nullable=False)
+    certificate_win = Column(Text, nullable=True)
+    certificate_part = Column(Text, nullable=True)
+    def __repr__(self):
+        return f"user('{self.host_code}','{self.link}','{self.orgn}')"
+
+class points(Base):
+    __tablename__ = 'points'
+
+    sw_id = Column(String, ForeignKey('sw.host_code'), nullable=False)
+    person = Column(String, ForeignKey('person.email'), nullable=False)
+    points = Column(Integer, nullable=False, default=0)
+    
+
+  
 
 
 class Message(Base):
@@ -121,17 +155,23 @@ Base.metadata.create_all(engine)
 # Create a new session
 session = Session()
 
-# Create a new instance of the Sw class
-sw = Sw(
-    host_code='test_host_code',
-    host_name='test_host_name',
-    switch=True,
-    link='http://example.com',
-    orgn='test_orgn'
-)
 
-# Add the new instance to the session
-session.add(sw)
+def add_email(email):
+    person = Person(email=email)
+    session.add(person)
+    session.commit()
 
-# Commit the session to write the changes to the database
-session.commit()
+# # Create a new instance of the Sw class
+# sw = Sw(
+#     host_code='test_host_code',
+#     host_name='test_host_name',
+#     switch=True,
+#     link='http://example.com',
+#     orgn='test_orgn'
+# )
+
+# # Add the new instance to the session
+# session.add(sw)
+
+# # Commit the session to write the changes to the database
+# session.commit()
