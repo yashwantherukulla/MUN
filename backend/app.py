@@ -38,16 +38,15 @@ async def get_messages(data: messages):
     host_code = data.host_code
     country_code = data.country_code
     data = {'host_code': host_code, 'country_code': country_code}
-    async with httpx.AsyncClient() as client:
-        response = await client.post('http://127.0.0.1:5000/confi', json=data)
-    json_response = response.json()
-    return {'messages': json_response}
+    
+    return {'messages': data}
 
 
 @app.post('/get_messagesL')
 async def get_messagesL(data: messages):
     host_code = data.host_code
     country_code = data.country_code
+    
     data = {'host_code': host_code, 'country_code': country_code}
 
 @app.post('/send_message')
