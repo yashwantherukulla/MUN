@@ -21,12 +21,10 @@ app = FastAPI()
 
 
 
-
-
 # Add the CORS middleware to your FastAPI application
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allows all origins
+    allow_origins=["http://localhost:3000"],  # Allows all origins
     allow_credentials=True,
     allow_methods=["*"],  # Allows all methods
     allow_headers=["*"],
@@ -60,7 +58,7 @@ async def send_message(data: sendMessages):
 async def email_add(data: emailAdd):
     try:
         email = data.email
-        if "@" not in email:
+        if "@" not in email or session.query(Person).filter_by(email=email).first() is not None:
             return {"status":"Failed"}
         #request.session["person"] = email 
         add_email(email)
@@ -72,7 +70,6 @@ async def email_add(data: emailAdd):
 @app.post('/mun_page')
 async def mun_page(data: munPage):
     person1 = session.query(Person).filter_by(email=data.email).first()#harshdipashah@gmail.com
-    logging.info(data)
     user_mun = session.query(User).filter_by(person=person1.email).all()
     user_mun_list = []
     for i in user_mun:
@@ -83,3 +80,20 @@ async def mun_page(data: munPage):
         if [i.host_code, i.host_name] not in user_mun_list:
             user_mun_reg_list.append([i.host_code, i.host_name])
     return {"mun_list_user": user_mun_list, "mun_list_reg": user_mun_reg_list}
+
+
+@app.post('/mun_reg')
+async def mun_reg(data: munReg):
+    email=data.email
+    host_code = data.host_code
+    user = User(
+    person=email,
+    host_code=host_code,
+    post='',
+    auto_reply_switch=False,
+    attendance=True
+)
+    
+    
+    
+    
