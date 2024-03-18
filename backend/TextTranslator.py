@@ -146,5 +146,5 @@ def main(dest_lang:str, file_path):
     except Exception as e:
         print(f"An error occurred: {e}")
 
-print(main("de", "backend/test.pdf"))
+# print(main("de", "backend/test.pdf"))
 # print(chunkedstring(pdf2txt("backend/test.pdf"), 4550))
