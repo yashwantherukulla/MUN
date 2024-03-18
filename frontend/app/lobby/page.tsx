@@ -27,7 +27,7 @@ const Room = () => {
           <a href="lobby.html">
             <h3 id="logo">
               <Image src={logo} alt="Site Logo" width={40} height={10} />
-              <span>Mumble</span>
+              <span className='text-blue-500'>SummitSync</span>
             </h3>
           </a>
         </div>

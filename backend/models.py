@@ -12,3 +12,9 @@ class sendMessages(BaseModel):
 class emailAdd(BaseModel):
     email: str = None
 
+class munPage(BaseModel):
+    email: str = ''
+    
+class munReg(BaseModel):
+    email: str = ''
+    host_code: str = ''
