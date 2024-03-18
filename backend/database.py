@@ -47,16 +47,16 @@ class Sw(Base):
 class certificate(Base):
     __tablename__ = 'certificate'
 
+    id = Column(Integer, primary_key=True)  # Add this line
     sw_id = Column(String, ForeignKey('sw.host_code'), nullable=False)
     certificate_win = Column(Text, nullable=True)
     certificate_part = Column(Text, nullable=True)
+
     def __repr__(self):
         return f"user('{self.certificate_win}','{self.certificate_part}')"
-
-
 class design(Base):
     __tablename__ = 'design'
-
+    id = Column(Integer, primary_key=True)  # Add this line
     sw_id = Column(String, ForeignKey('sw.host_code'), nullable=False)
     certificate_win = Column(Text, nullable=True)
     certificate_part = Column(Text, nullable=True)
@@ -65,7 +65,7 @@ class design(Base):
 
 class points(Base):
     __tablename__ = 'points'
-
+    id = Column(Integer, primary_key=True)  # Add this line
     sw_id = Column(String, ForeignKey('sw.host_code'), nullable=False)
     person = Column(String, ForeignKey('person.email'), nullable=False)
     points = Column(Integer, nullable=False, default=0)
