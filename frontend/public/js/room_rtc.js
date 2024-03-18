@@ -18,7 +18,7 @@ if(!roomId || roomId === ''){
     roomId = 'main'
 }
 
-let displayName = sessionStorage.getItem('display_name')
+let displayName = localStorage.getItem('display_name')
 if (!displayName) {
     window.location.href = '/lobby';
 }
@@ -54,6 +54,7 @@ let joinRoomInit = async () => {
 
 let joinStream = async () => {
     document.getElementById('join-btn').style.display = 'none'
+    document.getElementById('join-btn-1').style.display = 'none'
     document.getElementsByClassName('stream__actions')[0].style.display = 'flex'
 
     localTracks = await AgoraRTC.createMicrophoneAndCameraTracks({}, {encoderConfig:{
@@ -216,6 +217,7 @@ let leaveStream = async (e) => {
     e.preventDefault()
 
     document.getElementById('join-btn').style.display = 'block'
+    document.getElementById('join-btn-1').style.display = 'block'
     document.getElementsByClassName('stream__actions')[0].style.display = 'none'
 
     for(let i = 0; localTracks.length > i; i++){
@@ -251,6 +253,7 @@ document.getElementById('camera-btn').addEventListener('click', toggleCamera)
 document.getElementById('mic-btn').addEventListener('click', toggleMic)
 document.getElementById('screen-btn').addEventListener('click', toggleScreen)
 document.getElementById('join-btn').addEventListener('click', joinStream)
+document.getElementById('join-btn-1').addEventListener('click', joinStream)
 document.getElementById('leave-btn').addEventListener('click', leaveStream)
 
 
