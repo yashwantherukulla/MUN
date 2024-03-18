@@ -37,6 +37,7 @@ async def get_messages(data: messages):
     country_code = data.country_code
     data = {'host_code': host_code, 'country_code': country_code}
     
+    
     return {'messages': data}
 
 
@@ -86,14 +87,23 @@ async def mun_page(data: munPage):
 async def mun_reg(data: munReg):
     email=data.email
     host_code = data.host_code
-    user = User(
-    person=email,
-    host_code=host_code,
-    post='',
-    auto_reply_switch=False,
-    attendance=True
-)
-    
+    if session.query(User).filter_by(person=email, host_code=host_code).first() is not None:
+        return {"status":"Failed"}
+    else:
+        try:
+            user = User(
+            person=email,
+            host_code=host_code,
+            post='',
+            auto_reply_switch=False,
+            attendance=True
+            )
+            session.add(user)
+            session.commit()
+            return {"status":"Success"}
+        except:
+            return {"status":"Failed"}
+        
     
     
     
