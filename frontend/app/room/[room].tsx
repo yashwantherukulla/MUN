@@ -26,7 +26,7 @@ const Room = () => {
             <Link href="/">
               <h3 id="logo">
                 <Image src={logo} alt="Site Logo" width={40} height={10} />
-                <span className="text-blue-500">SummitSync</span>
+                <span className='text-blue-500'>SummitSync</span>
               </h3>
             </Link>
           </div>
@@ -89,12 +89,9 @@ const Room = () => {
                   </svg>
                 </button>
               </div>
-
-              <div className="flex flex-row">
-                <button id="join-btn">Join Stream</button>
-                <Link target="_blank" href="/createChit">
-                  <button id="join-btn-1">Join Chits</button>
-                </Link>
+              <div className='flex flex-row'>
+              <button id="join-btn">Join Stream</button>
+              <Link target='_blank' href="/createChit"><button id="join-btn-1">Join Chits</button></Link>
               </div>
             </section>
 

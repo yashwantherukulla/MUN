@@ -11,6 +11,7 @@ const Register = () => {
   const handleSignIn = async () => {
     try {
       await googleSignIn();
+      router.push('/joinRegister')
     } catch (error) {
       console.log(error);
     }
