@@ -239,6 +239,12 @@ def msg_sent(host_id, admin_country):
 
 
 
+
+
+
+
+
+
 Base.metadata.create_all(engine)
 
 
@@ -297,4 +303,27 @@ sw3 = Sw(
 # # Commit the session to write the changes to the database
 # session.commit()
     
+
+person  = session.query(Person).filter_by(email='harshdipashah@gmail.com').first()
+
+user1 = User(
+    person=person.email,
+    host_code='test_host_code',
+    post='test_post',
+    auto_reply_switch=True,
+    attendance=False
+)
+
+user2 = User(
+    person=person.email,
+    host_code='test_host_code2',
+    post='test_post2',
+    auto_reply_switch=False,
+    attendance=True
+)
+
+# session.add(user1)
+# session.add(user2)
+
+# session.commit()
 
