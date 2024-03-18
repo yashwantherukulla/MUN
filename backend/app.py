@@ -87,7 +87,7 @@ async def send_message(data: sendMessages):
     pass
 
 @app.post('/email_sign_up')
-async def email_add(data: emailAdd, current_user: dict = Depends(get_current_user)):
+async def email_add(data: emailAdd):
     try:
         email = data.email
         if "@" not in email:
