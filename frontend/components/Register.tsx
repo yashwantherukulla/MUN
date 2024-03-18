@@ -11,7 +11,6 @@ const Register = () => {
   const handleSignIn = async () => {
     try {
       await googleSignIn();
-      router.push('/joinRegister');
     } catch (error) {
       console.log(error);
     }
@@ -34,7 +33,7 @@ const Register = () => {
   }, [user]);
 
   useEffect(() => {
-    if (user) {
+    if (user != null && user) {
       axios
         .post(
           'http://127.0.0.1:8001/email_sign_up',

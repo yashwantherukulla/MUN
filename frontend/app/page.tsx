@@ -1,6 +1,5 @@
 "use client";
 import React, {useState} from 'react'
-import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { LampContainer } from '../components/ui/lamp';
 import { AuthContextProvider } from '../app/context/AuthContext';
