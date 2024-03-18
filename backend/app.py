@@ -3,14 +3,14 @@ from fastapi import FastAPI, HTTPException, Depends, status
 import firebase_admin
 from firebase_admin import auth
 from fastapi.security import OAuth2PasswordBearer
-from typing import Optional
 from fastapi.middleware.cors import CORSMiddleware  # Import the CORS middleware
 import requests
 import asyncio
 import httpx
 import logging
 import json
-from pydantic import BaseModel
+from backend.database import *
+
 logging.basicConfig(filename='app.log', filemode='w', format='%(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 from fastapi.responses import RedirectResponse
     
@@ -43,10 +43,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
 )
 
 
-class messages(BaseModel):
-    messages: dict = {}
-    host_code: str = "None"
-    country_code: str = "None"
+
 
 # Add the CORS middleware to your FastAPI application
 app.add_middleware(
@@ -84,4 +81,8 @@ async def get_messagesL(data: messages, current_user: dict = Depends(get_current
     host_code = data.host_code
     country_code = data.country_code
     data = {'host_code': host_code, 'country_code': country_code}
+
+@app.post('/send_message')
+async def send_message(data: sendMessages):
+    pass
 
