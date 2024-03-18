@@ -32,10 +32,10 @@ class Searcher:
             return links
         else:
             links = []
-        for domain in domains:
-            query = f"site:{domain} {word}"
-            domain_links = await self.aget_results(query)
-            links.extend(domain_links)
+            for domain in domains:
+                query = f"site:{domain} {word}"
+                domain_links = await self.aget_results(query)
+                links.extend(domain_links)
         return links
 
     async def search_and_get_content(self, word, domains=None):
