@@ -8,6 +8,7 @@ from datetime import datetime
 from sqlalchemy import ForeignKey
 from timest import current_time, startTIime
 
+
 Base = declarative_base()
 
 engine = create_engine('sqlite:///../data.db')
@@ -73,30 +74,6 @@ class deleteInfo(Base):
 
     def __repr__(self):
         return f"DeleteInfo('{self.certificateCode}','{self.design_time}')"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -171,7 +148,7 @@ class Message(Base):
     host_code = Column(String, nullable=False)
     to = Column(String(50), nullable=False)
     from_c = Column(String(50), nullable=False)
-    viaeb = Column(String(10), nullable=False)
+    viaeb = Column(String(10), nullable=False, default='No')
     message = Column(Text, nullable=False)
     timestamp = Column(String, nullable=False)
     point = Column(String, nullable=False, default='General')
@@ -184,19 +161,19 @@ class Message(Base):
 
 
 def message_adder_dab(host_id, to_c, from_country, viaeb_c, message_c, replyid_c, chit_pnt='General'):
-    msg = Message(host_code=host_id, to=to_c, timestamp=datetime.now(), from_c=from_country, viaeb=viaeb_c, message=message_c, point=chit_pnt, replyid=replyid_c)
+    msg = Message(host_code=host_id, to=to_c, timestamp=current_time(), from_c=from_country, viaeb=viaeb_c, message=message_c, point=chit_pnt, replyid=replyid_c)
     Session.add(msg)
     Session.commit()
 
 def swit(host_id):
     try:
-        return Session.query(Sw).filter_by(host_code=host_id).first().switch
+        return session.query(Sw).filter_by(host_code=host_id).first().switch
     except NoResultFound:
         return False
 
 def change_switch(host_id):
     try:
-        sw = Session.query(Sw).filter_by(host_code=host_id).first()
+        sw = session.query(Sw).filter_by(host_code=host_id).first()
         sw.switch = not sw.switch
         Session.commit()
     except NoResultFound:
@@ -204,7 +181,7 @@ def change_switch(host_id):
 
 def change_switch_auto_r(user_idq):
     try:
-        user = Session.query(User).filter_by(user_id=user_idq).first()
+        user = session.query(User).filter_by(user_id=user_idq).first()
         user.auto_reply_switch = not user.auto_reply_switch
         Session.commit()
     except NoResultFound:
@@ -220,13 +197,14 @@ def message_to_list(query_result):
             pass
     return msg_lst
 
-def msg_sent(host_id, admin_country):
-    temp_msg = message_to_list(Session.query(Message).filter_by(host_code=host_id , from_c=admin_country).all())
+def msg_sent(host_id, email):
+    admin_country = session.query(User).filter_by(person=email, host_code=host_id).first().post
+    temp_msg = message_to_list(session.query(Message).filter_by(host_code=host_id , from_c=admin_country).all())
     fnl = []
     for p in temp_msg:
         try:
             if p[-1].isnumeric():
-                reply = Session.query(Message).filter_by(id=int(p[-1])).first().message
+                reply = session.query(Message).filter_by(id=int(p[-1])).first().message
                 p.pop()
                 p.append(reply)
                 fnl.append(p)
@@ -237,10 +215,100 @@ def msg_sent(host_id, admin_country):
     return fnl
 
 
+def country_li(host_id):
+    user=session.query(User).filter_by(host_code=host_id).all()
+    c_l=[]
+    for i in user:
+        if i.post in c_l:
+            pass
+        else:
+            c_l.append(i.post)
+    return c_l
 
 
 
 
+def msg_rec(host_id, email):
+    admin_country = session.query(User).filter_by(person=email, host_code=host_id).first().post
+    temp_msg = message_to_list(session.query(Message).filter_by(host_code=host_id, to=admin_country).all())
+    fnl = []
+    for p in temp_msg:
+        try:
+            if p[-1].isnumeric():
+                reply = session.query(Message).filter_by(id=int(p[-1])).first().message
+                p.pop()
+                p.append(reply)
+                fnl.append(p)
+            else:
+                fnl.append(p)
+        except:
+            pass
+    return fnl
+
+
+def msg_eb(host_id):
+        temp_msg = message_to_list(session.query(Message).filter_by(host_code=host_id, viaeb='Yes').all())
+        fnl = []
+        for p in temp_msg:
+            try:
+                if p[-1].isnumeric():
+                    reply = session.query(Message).filter_by(id=int(p[-1])).first().message
+                    p.pop()
+                    p.append(reply)
+                    fnl.append(p)
+                else:
+                    fnl.append(p)
+            except:
+                pass
+        return fnl
+
+
+
+
+import pandas as pd
+column_for_messages=["msg_id","to","from","viaeb","message","datetime",'point',"replyid","proccessed_text"]
+
+def msg_sort_r(host_id,email,sort_country,sort_query):
+    admin_country = session.query(User).filter_by(person=email, host_code=host_id).first().post
+    msg_r=msg_rec(host_id,admin_country)
+    df= pd.DataFrame(msg_r,columns=column_for_messages)
+    if sort_country==all_opt and sort_query!=all_opt:
+            filt = (df['point'])==sort_query
+            return (df[filt].values.tolist())
+    elif sort_country!=all_opt and sort_query==all_opt:
+        filt = (df['from'])==sort_country
+        return (df[filt].values.tolist())
+    elif sort_country!=all_opt and sort_query!=all_opt:
+        filt = ((df['from'])==sort_country) & ((df['point'])==sort_query)
+        return (df[filt].values.tolist())
+
+
+def msg_sort_s(host_id,email,sort_country,sort_query):
+    admin_country = session.query(User).filter_by(person=email, host_code=host_id).first().post
+    msg_s=msg_sent(host_id,admin_country)
+    df= pd.DataFrame(msg_s,columns=column_for_messages)
+    if sort_country==all_opt and sort_query!=all_opt:
+        filt = (df['point'])==sort_query
+        return (df[filt].values.tolist())
+    elif sort_country!=all_opt and sort_query==all_opt:
+        filt = (df['to'])==sort_country
+        return (df[filt].values.tolist())
+    elif sort_country!=all_opt and sort_query!=all_opt:
+        filt = ((df['to'])==sort_country) & ((df['point'])==sort_query)
+        return (df[filt].values.tolist())
+
+def via_eb_sort(host_id,sort_country,sort_query):
+    msg_eb= msg_eb(host_id)
+    df= pd.DataFrame(msg_eb,columns=column_for_messages)
+    if sort_country==all_opt and sort_query!=all_opt:
+        filt = ((df['point'])==sort_query)
+        return (df[filt].values.tolist())
+    elif sort_country!=all_opt and sort_query==all_opt:
+        filt = ((df['to']==sort_country) | (df['from']==sort_country))
+        return (df[filt].values.tolist())
+    elif sort_country!=all_opt and sort_query!=all_opt:
+        filt = (((df['point'])==sort_query) & ((df['to']==sort_country)) | (((df['point'])==sort_query) & (df['from']==sort_country)))
+        return (df[filt].values.tolist())
 
 
 
@@ -326,4 +394,6 @@ user2 = User(
 # session.add(user2)
 
 # session.commit()
+
+
 
