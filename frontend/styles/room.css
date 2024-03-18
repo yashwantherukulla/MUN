@@ -13,7 +13,6 @@
 
 #members__container {
   background-color: #262625;
-  border-right: 1px solid #797a79;
   overflow-y: auto;
   width: 90%;
   max-width: 250px;
@@ -141,7 +140,7 @@
   position: fixed;
   bottom: 0;
   display: block;
-  background-color: #1a1a1a;
+  background-color: #282736;
   padding: 1em;
 }
 
@@ -304,7 +303,7 @@
   border-radius: 8px;
   background-color: #1a1a1a60;
   padding: 1rem;
-  left: 50%;
+  left: 45%;
   display: none;
   gap: 1rem;
   transform: translateX(-50%);
@@ -348,7 +347,22 @@
   position: fixed;
   bottom: 1rem;
   border-radius: 8px;
-  left:50%;
+  left:55%;
+  transform: translateX(-50%);
+  cursor: pointer;
+}
+
+#join-btn-1{
+  background-color: rgb(84, 84, 229);
+  font-size: 18px;
+  padding: 25px 50px;
+  border: none;
+  color:#fff;
+
+  position: fixed;
+  bottom: 1rem;
+  border-radius: 8px;
+  left:35%;
   transform: translateX(-50%);
   cursor: pointer;
 }

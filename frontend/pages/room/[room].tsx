@@ -6,6 +6,7 @@ import Image from 'next/image';
 import logo from '../../images/logo.png';
 import '../../styles/room.css';
 import '../../styles/main.css';
+import Link from 'next/link';
 
 const Room = () => {
   const router = useRouter();
@@ -33,12 +34,12 @@ const Room = () => {
                 <path d="M24 19h-24v-1h24v1zm0-6h-24v-1h24v1zm0-6h-24v-1h24v1z" />
               </svg>
             </button>
-            <a href="lobby.html">
+            <Link href="/">
               <h3 id="logo">
                 <Image src={logo} alt="Site Logo" width={40} height={10} />
                 <span className='text-blue-500'>SummitSync</span>
               </h3>
-            </a>
+            </Link>
           </div>
 
           <div id="nav__links">
@@ -73,6 +74,11 @@ const Room = () => {
               <div id="streams__container"></div>
 
               <div className="stream__actions">
+              <Link href="/createChit" target='_blank'><button id="chit-btn">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                    <path d="M7.533 0a1.816 1.816 0 0 0-1.816 1.816v2.832h11.178c1.043 0 1.888.855 1.888 1.91v8.204h2.906a1.816 1.816 0 0 0 1.817-1.817V1.816A1.816 1.816 0 0 0 21.689 0H7.533zM2.311 5.148A1.816 1.816 0 0 0 .494 6.965V23.09c0 .81.979 1.215 1.55.642l3.749-3.748h10.674a1.816 1.816 0 0 0 1.816-1.816V6.965a1.816 1.816 0 0 0-1.816-1.817H2.31Z" />
+                  </svg>
+                </button></Link>
                 <button id="camera-btn" className="active">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                     <path d="M5 4h-3v-1h3v1zm10.93 0l.812 1.219c.743 1.115 1.987 1.781 3.328 1.781h1.93v13h-20v-13h3.93c1.341 0 2.585-.666 3.328-1.781l.812-1.219h5.86zm1.07-2h-8l-1.406 2.109c-.371.557-.995.891-1.664.891h-5.93v17h24v-17h-3.93c-.669 0-1.293-.334-1.664-.891l-1.406-2.109zm-11 8c0-.552-.447-1-1-1s-1 .448-1 1 .447 1 1 1 1-.448 1-1zm7 0c1.654 0 3 1.346 3 3s-1.346 3-3 3-3-1.346-3-3 1.346-3 3-3zm0-2c-2.761 0-5 2.239-5 5s2.239 5 5 5 5-2.239 5-5-2.239-5-5-5z" />
@@ -94,8 +100,10 @@ const Room = () => {
                   </svg>
                 </button>
               </div>
-
+              <div className='flex flex-row'>
               <button id="join-btn">Join Stream</button>
+              <Link target='_blank' href="/createChit"><button id="join-btn-1">Join Chits</button></Link>
+              </div>
             </section>
 
             <section id="messages__container">

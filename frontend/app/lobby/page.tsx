@@ -12,7 +12,7 @@ const Room = () => {
   const [name, setName] = useState('');
   const [room, setRoom] = useState('');
   const handleSubmit = () => {
-    sessionStorage.setItem('display_name', name);
+    localStorage.setItem('display_name', name);
 
     let inviteCode = room;
     if (!inviteCode) {
