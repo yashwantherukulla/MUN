@@ -12,7 +12,7 @@ let client;
 let rtmClient;
 let channel;
 
-let roomId = window.location.pathname.split('/').pop();
+let roomId = localStorage.getItem('roomId');
 
 if(!roomId || roomId === ''){
     roomId = 'main'
@@ -239,6 +239,8 @@ let leaveStream = async (e) => {
             videoFrames[i].style.width = '300px'
         }
     }
+
+    
 
     channel.sendMessage({text:JSON.stringify({'type':'user_left', 'uid':uid})})
 }
