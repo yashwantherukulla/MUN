@@ -31,8 +31,8 @@ const Register = () => {
 
   useEffect(() => {
     if (user) {
-      axios.post('https://your-api-url.com', {
-        // Your request body here
+      axios.post('127.0.0.1:8001/email_sign_up', {
+        email: user.email
       })
       .then((response) => {
         console.log(response);

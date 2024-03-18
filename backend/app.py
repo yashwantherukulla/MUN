@@ -9,12 +9,12 @@ import asyncio
 import httpx
 import logging
 import json
-from backend.database import *
+from database import *
 
 logging.basicConfig(filename='app.log', filemode='w', format='%(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 from fastapi.responses import RedirectResponse
     
-service_account_key_file = "backend/FirebaseServiceAccountKey.json"
+service_account_key_file = "FirebaseServiceAccountKey.json"
 
 app = FastAPI()
 
