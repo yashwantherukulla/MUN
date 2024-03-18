@@ -6,11 +6,101 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm.exc import NoResultFound
 from datetime import datetime
 from sqlalchemy import ForeignKey
+from timest import current_time, startTIime
 
 Base = declarative_base()
 
 engine = create_engine('sqlite:///./data.db')
 Session = sessionmaker(bind=engine)
+# Create a new session
+session = Session()
+
+
+class certificateInfo(Base):
+    __tablename__ = 'certificate_info'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String(50), nullable=False, default="")
+    certificate_code = Column(String, nullable=False, unique=True)
+    event = Column(String(50), nullable=False, default="")
+    category = Column(String(50), nullable=False, default="")
+    issue_date = Column(String(50), nullable=False, default=str(current_time()))
+    certificate_design_id = Column(String, nullable=False, default="")
+    special = Column(Boolean, nullable=False, default=False)
+    school_reg = Column(Boolean, nullable=False, default=False)
+    school_name = Column(String, nullable=False, default="")
+    position_bool = Column(Boolean, nullable=False, default=False)
+    position = Column(String, nullable=True)
+    description = Column(String, nullable=False, default="")
+    extra1 = Column(String, nullable=True)
+    extra2 = Column(String, nullable=True)
+    extra3 = Column(String, nullable=True)
+    extra4 = Column(String, nullable=True)
+
+    def __repr__(self):
+        return f"CertificateInfo('{self.name}','{self.certificate_code}', '{self.certificate_design_id}','{self.issue_date}')"
+
+
+class designInfo(Base):
+    __tablename__ = 'design_info'
+
+    certDesignID = Column(String, primary_key=True)
+    certificateCodeXYL = Column(String, nullable=False)
+    nameXYL = Column(String, nullable=True)
+    categoryXYL = Column(String, nullable=True)
+    positionXYL = Column(String, nullable=True)
+    schoolNameXYL = Column(String, nullable=True)
+    date = Column(String, nullable=False, default=str(current_time()))
+    extra1XYL = Column(String, nullable=True)
+    extra2XYL = Column(String, nullable=True)
+    extra3XYL = Column(String, nullable=True)
+    extra4XYL = Column(String, nullable=True)
+    maxFontSize = Column(Integer, nullable=False)
+    font = Column(String, nullable=False, default="alice_regular.ttf")
+    fontColorRGB = Column(String, nullable=False, default="0;0;0")
+    description = Column(String, nullable=False, default="F")
+
+    def __repr__(self):
+        return f"DesignInfo('{self.certDesignID}','{self.font}','{self.date}')"
+
+
+
+class deleteInfo(Base):
+    __tablename__ = 'delete_info'
+
+    certificateCode = Column(String, primary_key=True)
+    design_time = Column(Integer, default=startTIime())
+
+    def __repr__(self):
+        return f"DeleteInfo('{self.certificateCode}','{self.design_time}')"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 class Person(Base):
     __tablename__ = 'person'
@@ -152,9 +242,10 @@ def msg_sent(host_id, admin_country):
 Base.metadata.create_all(engine)
 
 
-# Create a new session
-session = Session()
 
+# toAdd = DesignInfo(certDesignID="P12", certificateCodeXYL="0;0;150", nameXYL="1085;774;630", categoryXYL="150;922;435", positionXYL="1310;850;245", schoolNameXYL="394;845;677", extra1XYL="T/F;T/F;Content;X;Y;L", extra2XYL="T/F;T/F;Content;X;Y;L", extra3XYL="T/F;T/F;Content;X;Y;L", extra4XYL="T/F;T/F;Content;X;Y;L", maxFontSize=60, description="T;content")
+# session.add(toAdd)
+# session.commit()
 
 def add_email(email):
     person = Person(email=email)
@@ -175,3 +266,5 @@ def add_email(email):
 
 # # Commit the session to write the changes to the database
 # session.commit()
+    
+
