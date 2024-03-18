@@ -26,12 +26,20 @@ class Searcher:
         truncated_text = ' '.join(words[:500])
         return truncated_text
 
-    async def search_and_get_links(self, word):
-        links = await self.aget_results(word)
+    async def search_and_get_links(self, word, domains=None):
+        if domains is None:
+            links = await self.aget_results(word)
+            return links
+        else:
+            links = []
+        for domain in domains:
+            query = f"site:{domain} {word}"
+            domain_links = await self.aget_results(query)
+            links.extend(domain_links)
         return links
 
-    async def search_and_get_content(self, word):
-        links = await self.aget_results(word)
+    async def search_and_get_content(self, word, domains=None):
+        links = search_and_get_links(word, domains)
         parsed_contents = []
         for link in links:
             content = self.get_content(link)

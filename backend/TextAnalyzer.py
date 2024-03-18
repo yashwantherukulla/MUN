@@ -9,7 +9,7 @@ import asyncio
 
 from Searcher import Searcher
 
-load_dotenv()
+load_dotenv()   
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 
 llm = ChatGoogleGenerativeAI(model="gemini-pro", google_api_key=GOOGLE_API_KEY)
@@ -61,7 +61,6 @@ def load_quantized_model(model_name: str):
     # device_map ensures the model is moved to GPU
     # load_in_4bit applies 4-bit dynamic quantization to massively reduce the resource requirements
     return model
-
 
 
 def summarize(text:str):
@@ -131,9 +130,11 @@ async def fact_analyser(input_text: str):
 
     searcher = Searcher()
     reference_texts = []
+    domains = ['un.org', 'cfr.org', 'apnews.com', 'news.google.co.in', 'spj.org', 'reuters.com', 'amnesty.org', 'cia.gov/the-world-factbook/', 'mea.gov.in']
     for question in questions:
-        reference_text = await searcher.search_and_get_content(question)
+        reference_text = await searcher.search_and_get_content(question, domains)
         reference_texts.append(reference_text)
+        print(reference_text)
     
     parser = JsonOutputParser(pydantic_object=FactAnalDS)
     prompt = PromptTemplate.from_template("""Given the input text, see if the sentence is factual or not.
@@ -175,6 +176,6 @@ async def main(text:str):
 
         
 
-text = "A comprehensive approach to promoting gender equality and empowering women in the workforce involves implementing legislation to guarantee equal pay for equal work, establishing accessible childcare services to facilitate women's participation in employment, providing training and educational opportunities to enhance women's skills and qualifications, and advancing women's representation in leadership roles through affirmative action policies."
+text = "The literacy rate in India is very high."
 
-print(asyncio.run(main(text)))
+asyncio.run(fact_analyser(text))
