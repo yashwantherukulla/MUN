@@ -12,3 +12,5 @@ class sendMessages(BaseModel):
 class emailAdd(BaseModel):
     email: str = None
 
+class munPage(BaseModel):
+    email: str = ''
