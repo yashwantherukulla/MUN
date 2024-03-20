@@ -6,7 +6,9 @@ from langchain_core.output_parsers import StrOutputParser
 from langchain_core.output_parsers import JsonOutputParser
 from langchain_core.pydantic_v1 import BaseModel, Field
 import asyncio
-
+import torch
+from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig, pipeline
+from langchain_community.llms import HuggingFacePipeline
 from Searcher import Searcher
 
 load_dotenv()   
@@ -15,10 +17,6 @@ GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 llm = ChatGoogleGenerativeAI(model="gemini-pro", google_api_key=GOOGLE_API_KEY)
 
 def load_local_llm():
-    import torch
-    from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig, pipeline
-    from langchain.llms import HuggingFacePipeline
-
     model_name = "mistralai/Mistral-7B-Instruct-v0.2"
 
     model = load_quantized_model(model_name)

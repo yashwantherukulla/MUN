@@ -39,7 +39,7 @@ class Searcher:
         return links
 
     async def search_and_get_content(self, word, domains=None):
-        links = search_and_get_links(word, domains)
+        links = await self.search_and_get_links(word, domains)
         parsed_contents = []
         for link in links:
             content = self.get_content(link)
