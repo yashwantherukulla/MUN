@@ -132,8 +132,9 @@ async def send_message(data: sendMessages):
     if user:
         message = data.message
         from_c = user.post
-        message_adder_dab(message['host_code'],message['to_c'],from_c,message['viaeb'],message['message'],message['replyid'],message['chit_pnt'])
-    pass
+        message_adder_dab(host_code,message['to_c'],from_c,message['viaeb'],message['message'],message['replyid'],message['chit_pnt'])
+        return {"status":"Success"}
+
 
 
 

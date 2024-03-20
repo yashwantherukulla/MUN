@@ -111,30 +111,12 @@ class Sw(Base):
     def __repr__(self):
         return f"user('{self.host_code}','{self.link}','{self.orgn}')"
 
-class certificate(Base):
-    __tablename__ = 'certificate'
-
-    id = Column(Integer, primary_key=True, autoincrement=True)  # Add this line
-    sw_id = Column(String, ForeignKey('sw.host_code'), nullable=False)
-    certificate_win = Column(Text, nullable=True)
-    certificate_part = Column(Text, nullable=True)
-
-    def __repr__(self):
-        return f"user('{self.certificate_win}','{self.certificate_part}')"
-class design(Base):
-    __tablename__ = 'design'
-    id = Column(Integer, primary_key=True, autoincrement=True)  # Add this line
-    sw_id = Column(String, ForeignKey('sw.host_code'), nullable=False)
-    certificate_win = Column(Text, nullable=True)
-    certificate_part = Column(Text, nullable=True)
-    def __repr__(self):
-        return f"user('{self.host_code}','{self.link}','{self.orgn}')"
 
 class points(Base):
     __tablename__ = 'points'
     id = Column(Integer, primary_key=True, autoincrement=True)  # Add this line
-    sw_id = Column(String, ForeignKey('sw.host_code'), nullable=False)
-    person = Column(String, ForeignKey('person.email'), nullable=False)
+    sw_id = Column(String, nullable=False)
+    person = Column(String, nullable=False)
     points = Column(Integer, nullable=False, default=0)
     
 
@@ -162,8 +144,8 @@ class Message(Base):
 
 def message_adder_dab(host_id, to_c, from_country, viaeb_c, message_c, replyid_c, chit_pnt='General'):
     msg = Message(host_code=host_id, to=to_c, timestamp=current_time(), from_c=from_country, viaeb=viaeb_c, message=message_c, point=chit_pnt, replyid=replyid_c)
-    Session.add(msg)
-    Session.commit()
+    session.add(msg)
+    session.commit()
 
 def swit(host_id):
     try:
@@ -191,7 +173,7 @@ def message_to_list(query_result):
     msg_lst = []
     for i in query_result:
         try:
-            t_m = [i.id, i.to, i.from_c, i.viaeb, i.message, i.timestamp, i.point, i.replyid, i.proccessed_text]
+            t_m = [i.id, i.to, i.from_c, i.viaeb, i.message, i.timestamp, i.point, i.replyid]
             msg_lst.append(t_m)
         except:
             pass
@@ -266,7 +248,7 @@ def msg_eb(host_id):
 
 
 import pandas as pd
-column_for_messages=["msg_id","to","from","viaeb","message","datetime",'point',"replyid","proccessed_text"]
+column_for_messages=["msg_id","to","from","viaeb","message","datetime",'point',"replyid"]
 
 def msg_sort_r(host_id,email,sort_country,sort_query):
     admin_country = session.query(User).filter_by(person=email, host_code=host_id).first().post
@@ -372,23 +354,23 @@ sw3 = Sw(
 # session.commit()
     
 
-person  = session.query(Person).filter_by(email='harshdipashah@gmail.com').first()
+# person  = session.query(Person).filter_by(email='harshdipashah@gmail.com').first()
 
-user1 = User(
-    person=person.email,
-    host_code='test_host_code',
-    post='test_post',
-    auto_reply_switch=True,
-    attendance=False
-)
+# user1 = User(
+#     person=person.email,
+#     host_code='test_host_code',
+#     post='test_post',
+#     auto_reply_switch=True,
+#     attendance=False
+# )
 
-user2 = User(
-    person=person.email,
-    host_code='test_host_code2',
-    post='test_post2',
-    auto_reply_switch=False,
-    attendance=True
-)
+# user2 = User(
+#     person=person.email,
+#     host_code='test_host_code2',
+#     post='test_post2',
+#     auto_reply_switch=False,
+#     attendance=True
+# )
 
 # session.add(user1)
 # session.add(user2)
